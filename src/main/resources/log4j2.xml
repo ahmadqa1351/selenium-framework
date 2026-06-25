@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+
+    <Properties>
+        <Property name="LOG_DIR">reports/logs</Property>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Property>
+        <Property name="LOG_PATTERN_CONSOLE">%d{HH:mm:ss.SSS} [%thread] %highlight{%-5level}{FATAL=red blink, ERROR=red, WARN=yellow, INFO=green, DEBUG=cyan} %cyan{%logger{30}} - %msg%n</Property>
+    </Properties>
+
+    <Appenders>
+
+        <!-- ── Console: colored output for local execution ── -->
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN_CONSOLE}" disableAnsi="false"/>
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+        </Console>
+
+        <!-- ── Framework log: all framework-level logs ── -->
+        <RollingFile name="FrameworkLog"
+                     fileName="${LOG_DIR}/framework.log"
+                     filePattern="${LOG_DIR}/framework-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="20MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="30"/>
+        </RollingFile>
+
+        <!-- ── Test execution log: per-test log entries ── -->
+        <RollingFile name="TestExecutionLog"
+                     fileName="${LOG_DIR}/test-execution.log"
+                     filePattern="${LOG_DIR}/test-execution-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="50MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="30"/>
+        </RollingFile>
+
+        <!-- ── Error log: WARN and above only, for quick error review ── -->
+        <RollingFile name="ErrorLog"
+                     fileName="${LOG_DIR}/errors.log"
+                     filePattern="${LOG_DIR}/errors-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="30"/>
+        </RollingFile>
+
+    </Appenders>
+
+    <Loggers>
+
+        <!-- ── Framework package: DEBUG level to files, INFO to console ── -->
+        <Logger name="com.enterprise.framework" level="DEBUG" additivity="false">
+            <AppenderRef ref="ConsoleAppender" level="INFO"/>
+            <AppenderRef ref="FrameworkLog"    level="DEBUG"/>
+            <AppenderRef ref="TestExecutionLog" level="DEBUG"/>
+            <AppenderRef ref="ErrorLog"         level="WARN"/>
+        </Logger>
+
+        <!-- ── Test package: INFO level ── -->
+        <Logger name="com.enterprise.framework.tests" level="INFO" additivity="false">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="TestExecutionLog"/>
+            <AppenderRef ref="ErrorLog" level="WARN"/>
+        </Logger>
+
+        <!-- ── Silence noisy third-party libraries ── -->
+        <Logger name="org.openqa.selenium"              level="WARN"/>
+        <Logger name="io.github.bonigarcia"             level="WARN"/>
+        <Logger name="org.apache.http"                  level="WARN"/>
+        <Logger name="io.restassured"                   level="WARN"/>
+        <Logger name="org.apache.poi"                   level="WARN"/>
+        <Logger name="com.aventstack.extentreports"     level="WARN"/>
+
+        <!-- ── Root logger: INFO to console, DEBUG to files ── -->
+        <Root level="INFO">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="FrameworkLog"/>
+            <AppenderRef ref="ErrorLog" level="WARN"/>
+        </Root>
+
+    </Loggers>
+
+</Configuration>
