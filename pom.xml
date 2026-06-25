@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.enterprise</groupId>
+    <artifactId>selenium-framework</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+    <name>Enterprise Selenium Automation Framework</name>
+    <description>Production-grade, scalable Selenium WebDriver framework for enterprise QA teams</description>
+
+    <properties>
+        <!-- Java version -->
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Core versions -->
+        <selenium.version>4.21.0</selenium.version>
+        <testng.version>7.10.2</testng.version>
+        <webdrivermanager.version>5.8.0</webdrivermanager.version>
+
+        <!-- Reporting -->
+        <extentreports.version>5.1.1</extentreports.version>
+
+        <!-- Logging -->
+        <log4j.version>2.23.1</log4j.version>
+
+        <!-- API Testing -->
+        <restassured.version>5.4.0</restassured.version>
+
+        <!-- Data handling -->
+        <poi.version>5.2.5</poi.version>
+        <gson.version>2.11.0</gson.version>
+        <jackson.version>2.17.1</jackson.version>
+
+        <!-- Utilities -->
+        <commons.io.version>2.16.1</commons.io.version>
+        <commons.lang.version>3.14.0</commons.lang.version>
+
+        <!-- Database -->
+        <mysql.version>8.3.0</mysql.version>
+
+        <!-- Maven plugin versions -->
+        <maven.surefire.version>3.2.5</maven.surefire.version>
+        <maven.compiler.version>3.13.0</maven.compiler.version>
+
+        <!-- Execution defaults (overridable via CLI: -Denv=qa -Dbrowser=chrome) -->
+        <env>qa</env>
+        <browser>chrome</browser>
+        <suiteXmlFile>testng.xml</suiteXmlFile>
+        <parallel.thread.count>4</parallel.thread.count>
+    </properties>
+
+    <dependencies>
+
+        <!-- ===== SELENIUM ===== -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium.version}</version>
+        </dependency>
+
+        <!-- Automatic driver binary management -->
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>${webdrivermanager.version}</version>
+        </dependency>
+
+        <!-- ===== TESTNG ===== -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+        </dependency>
+
+        <!-- ===== EXTENT REPORTS ===== -->
+        <dependency>
+            <groupId>com.aventstack</groupId>
+            <artifactId>extentreports</artifactId>
+            <version>${extentreports.version}</version>
+        </dependency>
+
+        <!-- ===== LOG4J2 ===== -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <!-- Bridges SLF4J (used by many libs) to Log4j2 -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+
+        <!-- ===== REST ASSURED (API Testing) ===== -->
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${restassured.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>json-path</artifactId>
+            <version>${restassured.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>xml-path</artifactId>
+            <version>${restassured.version}</version>
+        </dependency>
+
+        <!-- ===== EXCEL (Apache POI) ===== -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+
+        <!-- ===== JSON ===== -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <!-- ===== UTILITIES ===== -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons.io.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons.lang.version}</version>
+        </dependency>
+
+        <!-- ===== DATABASE ===== -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>${mysql.version}</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <!-- Compiler -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.version}</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+
+            <!-- Surefire: TestNG execution engine -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surefire.version}</version>
+                <configuration>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>${suiteXmlFile}</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <systemPropertyVariables>
+                        <!-- Pass -Denv=qa and -Dbrowser=chrome from CLI or CI -->
+                        <env>${env}</env>
+                        <browser>${browser}</browser>
+                        <parallel.thread.count>${parallel.thread.count}</parallel.thread.count>
+                    </systemPropertyVariables>
+                    <testFailureIgnore>false</testFailureIgnore>
+                    <reuseForks>true</reuseForks>
+                    <forkCount>${parallel.thread.count}</forkCount>
+                </configuration>
+            </plugin>
+
+        </plugins>
+
+        <!-- Ensure resources are included -->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
+    </build>
+
+    <!-- Execution profiles for different environments/CI scenarios -->
+    <profiles>
+
+        <profile>
+            <id>smoke</id>
+            <properties>
+                <suiteXmlFile>testng-smoke.xml</suiteXmlFile>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>regression</id>
+            <properties>
+                <suiteXmlFile>testng-regression.xml</suiteXmlFile>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>parallel</id>
+            <properties>
+                <suiteXmlFile>testng-parallel.xml</suiteXmlFile>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>headless</id>
+            <properties>
+                <browser>chrome_headless</browser>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>grid</id>
+            <properties>
+                <browser>chrome</browser>
+            </properties>
+        </profile>
+
+    </profiles>
+
+</project>
